@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { render, Text, Box } from "ink";
 import React from "react";
+import { registerInitCommand } from "./modules/init";
 
 const program = new Command();
 
@@ -23,5 +24,7 @@ program
             </Box>
         );
     });
+
+registerInitCommand(program);
 
 program.parse();

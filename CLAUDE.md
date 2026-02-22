@@ -77,3 +77,4 @@ src/
 - Error handling: throw typed errors from `kernel/errors.ts`; command handlers catch and render user-friendly output
 - File naming: kebab-case for files, PascalCase for types/components, camelCase for functions/variables
 - Ink components go in `src/ui/` if shared, or inline in command handlers if single-use
+- `Interface` for contracts/ports, `type` for data shapes
