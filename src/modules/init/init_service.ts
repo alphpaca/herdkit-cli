@@ -27,11 +27,3 @@ export async function writeConfig(
     const yaml = stringify(config);
     await filesystem.writeFile(`${cwd}/${CONFIG_FILENAME}`, yaml);
 }
-
-export function createPackageDirectory(
-    cwd: string,
-    path: string,
-    filesystem: Filesystem,
-): Promise<void> {
-    return filesystem.createDirectory(`${cwd}/${path}`);
-}

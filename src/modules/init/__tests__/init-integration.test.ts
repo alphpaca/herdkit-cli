@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach } from "bun:test";
-import { mkdtemp, rm, readFile, stat } from "node:fs/promises";
+import { mkdtemp, rm, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { NodeFilesystem } from "~/kernel/filesystem";
@@ -7,7 +7,6 @@ import {
     checkConfigExists,
     buildConfig,
     writeConfig,
-    createPackageDirectory,
 } from "~/modules/init/init_service";
 
 describe("init integration", () => {
@@ -22,13 +21,8 @@ describe("init integration", () => {
         await rm(tempDir, { recursive: true, force: true });
     });
 
-    test("full init flow: creates config and directory", async () => {
+    test("creates config with paths", async () => {
         expect(await checkConfigExists(tempDir, filesystem)).toBe(false);
-
-        await createPackageDirectory(tempDir, "packages", filesystem);
-
-        const dirStat = await stat(join(tempDir, "packages"));
-        expect(dirStat.isDirectory()).toBe(true);
 
         const config = buildConfig(["packages"]);
         await writeConfig(tempDir, config, filesystem);
@@ -43,7 +37,7 @@ describe("init integration", () => {
         expect(content).toContain("- packages");
     });
 
-    test("full init flow: creates config with empty paths", async () => {
+    test("creates config with empty paths", async () => {
         const config = buildConfig([]);
         await writeConfig(tempDir, config, filesystem);
 

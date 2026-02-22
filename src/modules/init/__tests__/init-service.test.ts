@@ -4,7 +4,6 @@ import {
     checkConfigExists,
     buildConfig,
     writeConfig,
-    createPackageDirectory,
 } from "~/modules/init/init_service";
 
 describe("checkConfigExists", () => {
@@ -62,15 +61,5 @@ describe("writeConfig", () => {
         const content = fs.getFileContent("/project/herdkit.yaml");
         expect(content).toContain("monorepo:");
         expect(content).toContain("paths: []");
-    });
-});
-
-describe("createPackageDirectory", () => {
-    test("creates directory via filesystem", async () => {
-        const fs = new FakeFilesystem();
-
-        await createPackageDirectory("/project", "packages", fs);
-
-        expect(await fs.directoryExists("/project/packages")).toBe(true);
     });
 });
