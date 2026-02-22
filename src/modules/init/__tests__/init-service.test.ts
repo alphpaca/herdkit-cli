@@ -1,11 +1,11 @@
 import { describe, test, expect } from "bun:test";
-import { FakeFilesystem } from "../../../kernel/filesystem";
+import { FakeFilesystem } from "~/kernel/filesystem";
 import {
     checkConfigExists,
     buildConfig,
     writeConfig,
     createPackageDirectory,
-} from "../../init-service";
+} from "~/modules/init/init_service";
 
 describe("checkConfigExists", () => {
     test("returns true when herdkit.yaml exists", async () => {

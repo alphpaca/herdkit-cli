@@ -2,13 +2,13 @@ import { describe, test, expect, beforeEach, afterEach } from "bun:test";
 import { mkdtemp, rm, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { NodeFilesystem } from "../../../kernel/filesystem";
+import { NodeFilesystem } from "~/kernel/filesystem";
 import {
     checkConfigExists,
     buildConfig,
     writeConfig,
     createPackageDirectory,
-} from "../init-service";
+} from "~/modules/init/init_service";
 
 describe("init integration", () => {
     let tempDir: string;

@@ -1,5 +1,5 @@
 import { stringify } from "yaml";
-import type { Filesystem } from "../../kernel/filesystem";
+import type { Filesystem } from "~/kernel/filesystem";
 import type { HerdkitConfig } from "./config";
 
 const CONFIG_FILENAME = "herdkit.yaml";

@@ -2,14 +2,14 @@ import type { Command } from "commander";
 import { render, Text, Box } from "ink";
 import TextInput from "ink-text-input";
 import React, { useState } from "react";
-import { NodeFilesystem } from "../../kernel/filesystem";
+import { NodeFilesystem } from "~/kernel/filesystem";
 import {
     checkConfigExists,
     buildConfig,
     writeConfig,
     createPackageDirectory,
 } from "./init_service";
-import type { Filesystem } from "../../kernel/filesystem";
+import type { Filesystem } from "~/kernel/filesystem";
 
 type InitFlowProps = {
     cwd: string;
