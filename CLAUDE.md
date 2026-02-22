@@ -75,6 +75,6 @@ src/
 - Use named exports exclusively (no default exports)
 - Prefer function parameters over class constructors for dependency injection — keep it simple
 - Error handling: throw typed errors from `kernel/errors.ts`; command handlers catch and render user-friendly output
-- File naming: kebab-case for files, PascalCase for types/components, camelCase for functions/variables
+- File naming: snake_case for files, PascalCase for types/components, camelCase for functions/variables
 - Ink components go in `src/ui/` if shared, or inline in command handlers if single-use
 - `Interface` for contracts/ports, `type` for data shapes
