@@ -1,5 +1,5 @@
 {
-  "name": "@alphpaca/herdkit",
+  "name": "@alphpaca/herdkit-cli",
   "version": "0.1.0",
   "type": "module",
   "bin": {
