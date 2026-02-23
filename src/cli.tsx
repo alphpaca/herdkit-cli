@@ -6,24 +6,21 @@ import { registerInitCommand } from "~/modules/init";
 
 const program = new Command();
 
-program
-    .name("herdkit")
-    .description("PHP monorepo management tool")
-    .version("0.1.0");
+program.name("herdkit").description("PHP monorepo management tool").version("0.1.0");
 
 program
-    .command("hello", { isDefault: true })
-    .description("Say hello")
-    .action(() => {
-        render(
-            <Box flexDirection="column" padding={1}>
-                <Text bold color="green">
-                    🦙 Herdkit
-                </Text>
-                <Text dimColor>PHP monorepo management tool</Text>
-            </Box>
-        );
-    });
+  .command("hello", { isDefault: true })
+  .description("Say hello")
+  .action(() => {
+    render(
+      <Box flexDirection="column" padding={1}>
+        <Text bold color="green">
+          🦙 Herdkit
+        </Text>
+        <Text dimColor>PHP monorepo management tool</Text>
+      </Box>,
+    );
+  });
 
 registerInitCommand(program);
 
