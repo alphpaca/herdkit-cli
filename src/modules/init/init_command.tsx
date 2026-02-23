@@ -23,6 +23,14 @@ function ConfigExistsMessage() {
     );
 }
 
+function ErrorMessage({ message }: { message: string }) {
+    return (
+        <Box padding={1}>
+            <Text color="red">Error: {message}</Text>
+        </Box>
+    );
+}
+
 export function registerInitCommand(program: Command): void {
     program
         .command("init")
@@ -31,14 +39,23 @@ export function registerInitCommand(program: Command): void {
             const cwd = process.cwd();
             const filesystem = new NodeFilesystem();
 
-            const exists = await checkConfigExists(cwd, filesystem);
-            if (exists) {
-                render(<ConfigExistsMessage />);
-                return;
-            }
+            try {
+                const exists = await checkConfigExists(cwd, filesystem);
+                if (exists) {
+                    render(<ConfigExistsMessage />);
+                    return;
+                }
 
-            const config = buildConfig([]);
-            await writeConfig(cwd, config, filesystem);
-            render(<ConfigCreatedMessage />);
+                const config = buildConfig([]);
+                await writeConfig(cwd, config, filesystem);
+                render(<ConfigCreatedMessage />);
+            } catch (error) {
+                const message =
+                    error instanceof Error
+                        ? error.message
+                        : "An unexpected error occurred";
+                render(<ErrorMessage message={message} />);
+                process.exitCode = 1;
+            }
         });
 }
