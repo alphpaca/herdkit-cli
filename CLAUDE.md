@@ -80,3 +80,4 @@ src/
 - File naming: snake_case for files, PascalCase for types/components, camelCase for functions/variables
 - Ink components go in `src/ui/` if shared, or inline in command handlers if single-use
 - `Interface` for contracts/ports, `type` for data shapes
+- For commit messages we are using the gitmoji convention
