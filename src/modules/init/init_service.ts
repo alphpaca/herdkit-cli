@@ -4,26 +4,23 @@ import type { HerdkitConfig } from "~/kernel/config";
 
 const CONFIG_FILENAME = "herdkit.yaml";
 
-export function checkConfigExists(
-    cwd: string,
-    filesystem: Filesystem,
-): Promise<boolean> {
-    return filesystem.fileExists(`${cwd}/${CONFIG_FILENAME}`);
+export function checkConfigExists(cwd: string, filesystem: Filesystem): Promise<boolean> {
+  return filesystem.fileExists(`${cwd}/${CONFIG_FILENAME}`);
 }
 
 export function buildConfig(paths: string[]): HerdkitConfig {
-    return {
-        monorepo: {
-            paths,
-        },
-    };
+  return {
+    monorepo: {
+      paths,
+    },
+  };
 }
 
 export async function writeConfig(
-    cwd: string,
-    config: HerdkitConfig,
-    filesystem: Filesystem,
+  cwd: string,
+  config: HerdkitConfig,
+  filesystem: Filesystem,
 ): Promise<void> {
-    const yaml = stringify(config);
-    await filesystem.writeFile(`${cwd}/${CONFIG_FILENAME}`, yaml);
+  const yaml = stringify(config);
+  await filesystem.writeFile(`${cwd}/${CONFIG_FILENAME}`, yaml);
 }
