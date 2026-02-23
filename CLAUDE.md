@@ -63,17 +63,20 @@ src/
 ### Adding a New Feature
 
 1. Create a module directory under `src/modules/<feature>/`
-2. Define domain types in `models/`
-3. Implement business logic in `services/`, accepting kernel ports via constructor/function params
-4. Create command handler in `commands/` that wires services to CLI
-5. Register the command in `src/cli.tsx`
-6. Export public API from `index.ts`
-7. Add tests in `__tests__/`
+2. For simple modules, all files can be co-located in the module directory
+3. For more complex modules, create structured subdirectories under `src/modules/<feature>/`
+    1. Define domain types in `models/`
+    2. Implement business logic in `services/`, accepting kernel ports via constructor/function params
+    3. Create command handler in `commands/` that wires services to CLI
+    4. Register the command in `src/cli.tsx`
+    5. Export public API from `index.ts`
+4. Add tests in `__tests__/`
 
 ### Conventions
 
 - Use named exports exclusively (no default exports)
 - Prefer function parameters over class constructors for dependency injection — keep it simple
 - Error handling: throw typed errors from `kernel/errors.ts`; command handlers catch and render user-friendly output
-- File naming: kebab-case for files, PascalCase for types/components, camelCase for functions/variables
+- File naming: snake_case for files, PascalCase for types/components, camelCase for functions/variables
 - Ink components go in `src/ui/` if shared, or inline in command handlers if single-use
+- `Interface` for contracts/ports, `type` for data shapes
