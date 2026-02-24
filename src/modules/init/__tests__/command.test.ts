@@ -4,26 +4,26 @@ import { prepareCommand } from "~/kernel/testing";
 import { registerInitCommand } from "~/modules/init";
 
 describe("init command", () => {
-	test("creates herdkit.yaml and renders success message", async () => {
-		const { run, lastFrame, filesystem } = prepareCommand(registerInitCommand);
+  test("creates herdkit.yaml and renders success message", async () => {
+    const { run, lastFrame, filesystem } = prepareCommand(registerInitCommand);
 
-		await run("init");
+    await run("init");
 
-		expect(lastFrame()).toContain("Created herdkit.yaml");
-		expect(filesystem.getFileContent("/test/herdkit.yaml")).toContain("monorepo:");
-	});
+    expect(lastFrame()).toContain("Created herdkit.yaml");
+    expect(filesystem.getFileContent("/test/herdkit.yaml")).toContain("monorepo:");
+  });
 
-	test("skips creation when config already exists", async () => {
-		const fs = new FakeFilesystem();
-		fs.addFile("/test/herdkit.yaml", "existing content");
+  test("skips creation when config already exists", async () => {
+    const fs = new FakeFilesystem();
+    fs.addFile("/test/herdkit.yaml", "existing content");
 
-		const { run, lastFrame, filesystem } = prepareCommand(registerInitCommand, {
-			filesystem: fs,
-		});
+    const { run, lastFrame, filesystem } = prepareCommand(registerInitCommand, {
+      filesystem: fs,
+    });
 
-		await run("init");
+    await run("init");
 
-		expect(lastFrame()).toContain("already exists");
-		expect(filesystem.getFileContent("/test/herdkit.yaml")).toBe("existing content");
-	});
+    expect(lastFrame()).toContain("already exists");
+    expect(filesystem.getFileContent("/test/herdkit.yaml")).toBe("existing content");
+  });
 });
