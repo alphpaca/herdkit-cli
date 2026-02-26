@@ -1,8 +1,8 @@
 import type { Command } from "commander";
-import { render, Text, Box } from "ink";
+import { Text, Box } from "ink";
 import React from "react";
-import { NodeFilesystem } from "~/kernel/filesystem";
-import { checkConfigExists, buildConfig, writeConfig } from "./init_service";
+import type { CommandContext } from "~/kernel/context";
+import { checkConfigExists, buildConfig, writeConfig } from "~/kernel/config";
 
 function ConfigCreatedMessage() {
   return (
@@ -30,27 +30,24 @@ function ErrorMessage({ message }: { message: string }) {
   );
 }
 
-export function registerInitCommand(program: Command): void {
+export function registerInitCommand(program: Command, ctx: CommandContext): void {
   program
     .command("init")
     .description("Initialize a new herdkit project")
     .action(async () => {
-      const cwd = process.cwd();
-      const filesystem = new NodeFilesystem();
-
       try {
-        const exists = await checkConfigExists(cwd, filesystem);
+        const exists = await checkConfigExists(ctx.cwd, ctx.filesystem);
         if (exists) {
-          render(<ConfigExistsMessage />);
+          ctx.render(<ConfigExistsMessage />);
           return;
         }
 
         const config = buildConfig([]);
-        await writeConfig(cwd, config, filesystem);
-        render(<ConfigCreatedMessage />);
+        await writeConfig(ctx.cwd, config, ctx.filesystem);
+        ctx.render(<ConfigCreatedMessage />);
       } catch (error) {
         const message = error instanceof Error ? error.message : "An unexpected error occurred";
-        render(<ErrorMessage message={message} />);
+        ctx.render(<ErrorMessage message={message} />);
         process.exitCode = 1;
       }
     });
