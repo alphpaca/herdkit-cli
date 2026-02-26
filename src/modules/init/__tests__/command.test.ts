@@ -26,4 +26,24 @@ describe("init command", () => {
     expect(lastFrame()).toContain("already exists");
     expect(filesystem.getFileContent("/test/herdkit.yaml")).toBe("existing content");
   });
+
+  test("renders error message and sets exit code when write fails", async () => {
+    const fs = new FakeFilesystem();
+    fs.writeFile = async () => {
+      throw new Error("Permission denied");
+    };
+
+    const previousExitCode = process.exitCode;
+
+    const { run, lastFrame } = prepareCommand(registerInitCommand, {
+      filesystem: fs,
+    });
+
+    await run("init");
+
+    expect(lastFrame()).toContain("Error: Permission denied");
+    expect(process.exitCode).toBe(1);
+
+    process.exitCode = previousExitCode ?? 0;
+  });
 });

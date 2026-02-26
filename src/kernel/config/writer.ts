@@ -1,4 +1,4 @@
-import { CONFIG_FILENAME, HerdkitConfig } from "~/kernel/config/herdkit_config";
+import { CONFIG_FILENAME, type HerdkitConfig } from "~/kernel/config/herdkit_config";
 import type { Filesystem } from "~/kernel/filesystem";
 import { stringify } from "yaml";
 

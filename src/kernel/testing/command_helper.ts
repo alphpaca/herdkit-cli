@@ -19,14 +19,11 @@ export function prepareCommand(
   program.exitOverride();
   program.configureOutput({ writeOut: () => {}, writeErr: () => {} });
 
-  const filesystem =
-    overrides?.filesystem instanceof FakeFilesystem ? overrides.filesystem : new FakeFilesystem();
-
   let lastFrameFn: () => string | undefined = () => undefined;
 
   const context: CommandContext = {
     cwd: "/test",
-    filesystem,
+    filesystem: new FakeFilesystem(),
     render: (element) => {
       const instance = render(element);
       lastFrameFn = () => instance.lastFrame();
@@ -40,7 +37,7 @@ export function prepareCommand(
   return {
     program,
     context,
-    filesystem,
+    filesystem: context.filesystem as FakeFilesystem,
     run: async (...args) => {
       await program.parseAsync(args, { from: "user" });
     },
