@@ -25,17 +25,25 @@ export async function detectPackages(
       }
 
       let name = entry;
+      let dependencies: Record<string, string> = {};
+      let devDependencies: Record<string, string> = {};
       try {
         const content = await filesystem.readFile(composerPath);
         const parsed = JSON.parse(content);
         if (typeof parsed.name === "string") {
           name = parsed.name;
         }
+        if (parsed.require && typeof parsed.require === "object") {
+          dependencies = { ...parsed.require };
+        }
+        if (parsed["require-dev"] && typeof parsed["require-dev"] === "object") {
+          devDependencies = { ...parsed["require-dev"] };
+        }
       } catch {
-        // Fall back to directory name
+        // Fall back to directory name, empty dependencies
       }
 
-      packages.push({ name, path: `${configPath}/${entry}` });
+      packages.push({ name, path: `${configPath}/${entry}`, dependencies, devDependencies });
     }
   }
 

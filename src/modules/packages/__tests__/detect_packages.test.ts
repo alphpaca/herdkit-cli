@@ -17,8 +17,8 @@ describe("detectPackages", () => {
     const result = await detectPackages("/test", makeConfig(["packages"]), fs);
 
     expect(result).toEqual([
-      { name: "vendor/alpha", path: "packages/alpha" },
-      { name: "vendor/beta", path: "packages/beta" },
+      { name: "vendor/alpha", path: "packages/alpha", dependencies: {}, devDependencies: {} },
+      { name: "vendor/beta", path: "packages/beta", dependencies: {}, devDependencies: {} },
     ]);
   });
 
@@ -40,6 +40,30 @@ describe("detectPackages", () => {
     expect(result).toEqual([]);
   });
 
+  test("extracts dependencies and devDependencies from composer.json", async () => {
+    const fs = new FakeFilesystem();
+    fs.addDirectory("/test/packages");
+    fs.addFile(
+      "/test/packages/alpha/composer.json",
+      JSON.stringify({
+        name: "vendor/alpha",
+        require: { "symfony/console": "^8.0" },
+        "require-dev": { "phpunit/phpunit": "^11.0" },
+      }),
+    );
+
+    const result = await detectPackages("/test", makeConfig(["packages"]), fs);
+
+    expect(result).toEqual([
+      {
+        name: "vendor/alpha",
+        path: "packages/alpha",
+        dependencies: { "symfony/console": "^8.0" },
+        devDependencies: { "phpunit/phpunit": "^11.0" },
+      },
+    ]);
+  });
+
   test("uses directory name when composer.json has invalid JSON", async () => {
     const fs = new FakeFilesystem();
     fs.addDirectory("/test/packages");
@@ -47,7 +71,9 @@ describe("detectPackages", () => {
 
     const result = await detectPackages("/test", makeConfig(["packages"]), fs);
 
-    expect(result).toEqual([{ name: "broken", path: "packages/broken" }]);
+    expect(result).toEqual([
+      { name: "broken", path: "packages/broken", dependencies: {}, devDependencies: {} },
+    ]);
   });
 
   test("uses directory name when composer.json has no name field", async () => {
@@ -57,6 +83,8 @@ describe("detectPackages", () => {
 
     const result = await detectPackages("/test", makeConfig(["packages"]), fs);
 
-    expect(result).toEqual([{ name: "unnamed", path: "packages/unnamed" }]);
+    expect(result).toEqual([
+      { name: "unnamed", path: "packages/unnamed", dependencies: {}, devDependencies: {} },
+    ]);
   });
 });
