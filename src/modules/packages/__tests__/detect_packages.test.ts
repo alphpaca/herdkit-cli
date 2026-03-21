@@ -76,6 +76,39 @@ describe("detectPackages", () => {
     ]);
   });
 
+  test("excludes php and ext-* entries from parsed dependencies", async () => {
+    const fs = new FakeFilesystem();
+    fs.addDirectory("/test/packages");
+    fs.addFile(
+      "/test/packages/alpha/composer.json",
+      JSON.stringify({
+        name: "vendor/alpha",
+        require: {
+          php: "^8.2",
+          "ext-mbstring": "*",
+          "ext-intl": "*",
+          "lib-openssl": ">=1.1",
+          "symfony/console": "^8.0",
+        },
+        "require-dev": {
+          php: "^8.2",
+          "phpunit/phpunit": "^11.0",
+        },
+      }),
+    );
+
+    const result = await detectPackages("/test", makeConfig(["packages"]), fs);
+
+    expect(result).toEqual([
+      {
+        name: "vendor/alpha",
+        path: "packages/alpha",
+        dependencies: { "symfony/console": "^8.0" },
+        devDependencies: { "phpunit/phpunit": "^11.0" },
+      },
+    ]);
+  });
+
   test("uses directory name when composer.json has no name field", async () => {
     const fs = new FakeFilesystem();
     fs.addDirectory("/test/packages");

@@ -60,6 +60,17 @@ describe("detectConflicts", () => {
     ]);
   });
 
+  test("does not report conflicts for non-package entries filtered by detectPackages", () => {
+    const packages = [
+      makePackage("a", { "symfony/console": "^8.0" }),
+      makePackage("b", { "symfony/console": "^8.0" }),
+    ];
+
+    const conflicts = detectConflicts(packages);
+
+    expect(conflicts).toEqual([]);
+  });
+
   test("handles packages with no dependencies without error", () => {
     const packages = [makePackage("a"), makePackage("b")];
 

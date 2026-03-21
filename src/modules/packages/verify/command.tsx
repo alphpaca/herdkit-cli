@@ -13,7 +13,7 @@ function ConflictList({ conflicts }: { conflicts: DependencyConflict[] }) {
       <Text color="red" bold>
         {conflicts.length} dependency conflict{conflicts.length !== 1 ? "s" : ""} found:
       </Text>
-      <Text>{""}</Text>
+      <Box marginTop={1} />
       {conflicts.map((conflict) => (
         <Box key={conflict.dependency} flexDirection="column" marginBottom={1}>
           <Text bold>{conflict.dependency}</Text>

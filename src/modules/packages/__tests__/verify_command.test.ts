@@ -19,20 +19,22 @@ describe("packages verify command", () => {
 
     const previousExitCode = process.exitCode;
 
-    const { run, lastFrame } = prepareCommand(registerPackagesCommand, {
-      filesystem: fs,
-    });
+    try {
+      const { run, lastFrame } = prepareCommand(registerPackagesCommand, {
+        filesystem: fs,
+      });
 
-    await run("packages", "verify");
+      await run("packages", "verify");
 
-    expect(lastFrame()).toContain("symfony/console");
-    expect(lastFrame()).toContain("^8.0");
-    expect(lastFrame()).toContain("^8.1");
-    expect(lastFrame()).toContain("vendor/alpha");
-    expect(lastFrame()).toContain("vendor/beta");
-    expect(process.exitCode).toBe(1);
-
-    process.exitCode = previousExitCode ?? 0;
+      expect(lastFrame()).toContain("symfony/console");
+      expect(lastFrame()).toContain("^8.0");
+      expect(lastFrame()).toContain("^8.1");
+      expect(lastFrame()).toContain("vendor/alpha");
+      expect(lastFrame()).toContain("vendor/beta");
+      expect(process.exitCode).toBe(1);
+    } finally {
+      process.exitCode = previousExitCode ?? 0;
+    }
   });
 
   test("renders success message when no conflicts", async () => {
