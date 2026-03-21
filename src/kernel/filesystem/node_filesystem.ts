@@ -1,4 +1,4 @@
-import { stat, mkdir } from "node:fs/promises";
+import { stat, mkdir, readdir, readFile as fsReadFile } from "node:fs/promises";
 import type { Filesystem } from "./filesystem";
 
 export class NodeFilesystem implements Filesystem {
@@ -21,5 +21,13 @@ export class NodeFilesystem implements Filesystem {
 
   async createDirectory(path: string): Promise<void> {
     await mkdir(path, { recursive: true });
+  }
+
+  async readFile(path: string): Promise<string> {
+    return fsReadFile(path, "utf-8");
+  }
+
+  async readDirectory(path: string): Promise<string[]> {
+    return readdir(path);
   }
 }
