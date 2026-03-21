@@ -2,6 +2,10 @@ import type { HerdkitConfig } from "~/kernel/config";
 import type { Filesystem } from "~/kernel/filesystem";
 import type { Package } from "~/modules/packages/models/package";
 
+function filterComposerPackages(deps: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.entries(deps).filter(([key]) => key.includes("/")));
+}
+
 export async function detectPackages(
   cwd: string,
   config: HerdkitConfig,
@@ -25,17 +29,25 @@ export async function detectPackages(
       }
 
       let name = entry;
+      let dependencies: Record<string, string> = {};
+      let devDependencies: Record<string, string> = {};
       try {
         const content = await filesystem.readFile(composerPath);
         const parsed = JSON.parse(content);
         if (typeof parsed.name === "string") {
           name = parsed.name;
         }
+        if (parsed.require && typeof parsed.require === "object") {
+          dependencies = filterComposerPackages(parsed.require);
+        }
+        if (parsed["require-dev"] && typeof parsed["require-dev"] === "object") {
+          devDependencies = filterComposerPackages(parsed["require-dev"]);
+        }
       } catch {
-        // Fall back to directory name
+        // Fall back to directory name, empty dependencies
       }
 
-      packages.push({ name, path: `${configPath}/${entry}` });
+      packages.push({ name, path: `${configPath}/${entry}`, dependencies, devDependencies });
     }
   }
 

@@ -35,10 +35,8 @@ function ErrorMessage({ message }: { message: string }) {
   );
 }
 
-export function registerPackagesCommand(program: Command, ctx: CommandContext): void {
-  const packages = program.command("packages").description("Manage monorepo packages");
-
-  packages
+export function registerListCommand(parent: Command, ctx: CommandContext): void {
+  parent
     .command("list")
     .description("List all detected packages")
     .action(async () => {
