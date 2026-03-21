@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { createCommandContext } from "~/kernel/context";
 import { registerInitCommand } from "~/modules/init";
+import { registerPackagesCommand } from "~/modules/packages";
 
 const program = new Command();
 
@@ -9,5 +10,6 @@ program.name("herdkit").description("PHP monorepo management tool").version("0.1
 
 const ctx = createCommandContext();
 registerInitCommand(program, ctx);
+registerPackagesCommand(program, ctx);
 
 program.parse();
